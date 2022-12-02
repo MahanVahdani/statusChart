@@ -1,20 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import { Tooltip } from "@material-tailwind/react";
 
 const Chart = ({
   data,
-  width = 1.5,
-  height = 8,
+  width = "0.3",
+  height = "1.5",
   colorOne = "#3bd671",
   colorTwo = "#f29030",
   colorThree = "#2f7f55",
   colorFour = "#df484a",
   colorUnknown = "#fff",
-  messageOne = "بدون اختلال",
-  messageTwo = "افت کیفیت",
-  messageThree = "اختلال به علت بروز رسانی",
-  messageFour = "خارج از دسترس",
-  messageUnknown = "تعریف نشده",
+  messageOne = "without any problem",
+  messageTwo = "quality loss",
+  messageThree = "problem due update",
+  messageFour = "out of service",
+  messageUnknown = "unknown",
 }) => {
   const handleStatusMessage = (upTime) => {
     return upTime === 100
@@ -26,6 +26,18 @@ const Chart = ({
       : upTime <= 69 && upTime >= 0
       ? messageFour
       : messageUnknown;
+  };
+
+  const handleBarColor = (upTime) => {
+    return upTime === 100
+      ? colorOne
+      : upTime <= 99 && upTime >= 90
+      ? colorTwo
+      : upTime <= 89 && upTime >= 70
+      ? colorThree
+      : upTime <= 69 && upTime >= 0
+      ? colorFour
+      : colorUnknown;
   };
 
   return (
@@ -47,19 +59,12 @@ const Chart = ({
           }
         >
           <div
-            className={`mx-[2px] rounded-md hover:brightness-50 transition-all duration-100 
-            ${"w-" + width}  ${"h-" + height}
-            ${
-              upTime === 100
-                ? "bg-[" + colorOne + "]"
-                : upTime <= 99 && upTime >= 90
-                ? "bg-[" + colorTwo + "]"
-                : upTime <= 89 && upTime >= 70
-                ? "bg-[" + colorThree + "]"
-                : upTime <= 69 && upTime >= 0
-                ? "bg-[" + colorFour + "]"
-                : "bg-[" + colorUnknown + "]"
-            }`}
+            className={`mx-[2px] rounded-md hover:brightness-50 transition-all duration-100`}
+            style={{
+              width: width + "rem",
+              height: height + "rem",
+              backgroundColor: handleBarColor(upTime),
+            }}
           />
         </Tooltip>
       ))}
@@ -68,3 +73,17 @@ const Chart = ({
 };
 
 export default Chart;
+
+// ${
+//   "w-" + width
+// } ${"h-" + height} ${handleBarColor(upTime)}
+
+// upTime === 100
+// ? "bg-[" + colorOne + "]"
+// : upTime <= 99 && upTime >= 90
+// ? "bg-[" + colorTwo + "]"
+// : upTime <= 89 && upTime >= 70
+// ? "bg-[" + colorThree + "]"
+// : upTime <= 69 && upTime >= 0
+// ? "bg-[" + colorFour + "]"
+// : "bg-[" + colorUnknown + "]";
