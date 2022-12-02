@@ -1,11 +1,11 @@
 export const data = [
   {
     date: "1401/1/1",
-    upTime: 100,
+    upTime: 102,
   },
   {
     date: "1401/1/2",
-    upTime: 100,
+    upTime: 101,
   },
   {
     date: "1401/1/3",
