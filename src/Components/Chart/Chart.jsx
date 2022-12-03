@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Tooltip } from "@material-tailwind/react";
 
 const Chart = ({
@@ -16,6 +16,18 @@ const Chart = ({
   messageFour = "out of service",
   messageUnknown = "unknown",
 }) => {
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+  const [optimizedData, setOptimizedData] = useState([]);
+
+  useEffect(() => {
+    screenWidth < 768
+      ? setOptimizedData(data.slice(data.length - 30, data.length))
+      : screenWidth < 1024
+      ? setOptimizedData(data.slice(data.length - 60, data.length))
+      : setOptimizedData(data);
+  }, []);
+
   const handleStatusMessage = (upTime) => {
     return upTime === 100
       ? messageOne
@@ -38,6 +50,14 @@ const Chart = ({
       : upTime <= 69 && upTime >= 0
       ? colorFour
       : colorUnknown;
+  };
+
+  const handlePeriodText = (days) => {
+    return days === 30
+      ? "past month"
+      : days === 60
+      ? "past 2 month"
+      : "past 3 month";
   };
 
   return (
@@ -68,22 +88,9 @@ const Chart = ({
           />
         </Tooltip>
       ))}
+      <p className="text-white"> {handlePeriodText(optimizedData.length)}</p>
     </div>
   );
 };
 
 export default Chart;
-
-// ${
-//   "w-" + width
-// } ${"h-" + height} ${handleBarColor(upTime)}
-
-// upTime === 100
-// ? "bg-[" + colorOne + "]"
-// : upTime <= 99 && upTime >= 90
-// ? "bg-[" + colorTwo + "]"
-// : upTime <= 89 && upTime >= 70
-// ? "bg-[" + colorThree + "]"
-// : upTime <= 69 && upTime >= 0
-// ? "bg-[" + colorFour + "]"
-// : "bg-[" + colorUnknown + "]";
